@@ -7,8 +7,11 @@ class Store:
         self.list = []
 
 
-class item:
-    pass
+class Item:
+    def __init__(self, title, price, quantity):
+        self.title = title
+        self.price = price
+        self.quantity = quantity
 
 def choices():
     print("Press 1 to Add Store")
@@ -38,7 +41,7 @@ def print_items():
         print(f"\n{i + 1} {values.store}\n")
         
         for items in stores[i].list:
-            print(items)
+            print(f"{items.title} ${items.price} Qty {items.quantity}")
         
         i += 1
 
@@ -49,7 +52,10 @@ def add_item():
         print_stores()
         add_to = int(input("What Store Are We Adding To? > "))
         item = input("What item are we adding? > ")
-        stores[add_to - 1].list.append(item)
+        price = input("How much is the item? > ")
+        quantity = input("How many are we buying? > ")
+        new_item = Item(item, price, quantity)
+        stores[add_to - 1].list.append(new_item)
         # print(stores[add_to - 1].list[0])
 
 while start == True:
