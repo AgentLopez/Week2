@@ -4,6 +4,7 @@ start = True
 class Store:
     def __init__(self, storename):
         self.store = storename
+        self.address = ""
         self.list = []
 
 
