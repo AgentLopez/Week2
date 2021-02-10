@@ -17,7 +17,7 @@ year = now.strftime("%Y")
 date = now.strftime("%m-%d-%Y")
 
 #Elapsed Time Table
-elapsed_time = ""
+# elapsed_time = ""
 
 
 #Table Array
@@ -40,14 +40,14 @@ for i in range(0, 12):
     tables.append(new_table)
 
 def menu():
-    print("-------------------------")
+    print("\n-------------------------\n")
     print("Press 1 To Assign a Table")
     print("Press 2 to Close a Table")
-    print("Press q to quit")
+    print("Press q to quit\n")
  
 def view_tables():
     i = 1
-    print("***** Pool Tables *****")
+    print("\n\n***** Pool Tables *****\n")
     for items in tables:
         if items.occupied == "Available":
             print(f"Table {i} is {items.occupied}")
@@ -56,31 +56,34 @@ def view_tables():
         i += 1
 
 def close_table():
-    closing = int(input("Which Pool Table are we Closing? >"))
-    table_number = closing - 1
-    date = now.strftime("%m-%d-%Y")
-    eltime = tardis(table_number)
-    f= open(f"{date}.txt", "a")
+    try:
+        closing = int(input("Which Pool Table are we Closing? >"))
+        table_number = closing - 1
+        date = now.strftime("%m-%d-%Y")
+        eltime = tardis(table_number)
+        f= open(f"{date}.txt", "a")
     
+        f.write(f"Table {closing}, {tables[table_number].hour}:{tables[table_number].minute}, {hour}:{minute}, Occupied for {eltime}\n")
+        f.close()
+    
+        # print(tardis(table_number))
 
-    f.write(f"Table {closing}, {tables[table_number].hour}:{tables[table_number].minute}, {hour}:{minute}, Occupied for {eltime}\n")
-    f.close()
-    
-    
-    # print(tardis(table_number))
-
-    vacate_table = Pooltable("Available")
-    tables[table_number] = vacate_table
+        vacate_table = Pooltable("Available")
+        tables[table_number] = vacate_table
+    except:
+        print("\nWoops, Let's start from the top!\n")
 
 
 def assign_table():
-    
-    assign = int(input("What Pool Table are we Assigning? >"))
-    if tables[assign - 1].occupied == "Occupied":
-        print("Table is occupied, Can Not Assign")
-    else:
-        new_table = Pooltable("Occupied", second, minute, hour, day, month, year)
-        tables[assign - 1] = new_table
+    try:
+        assign = int(input("What Pool Table are we Assigning? >"))
+        if tables[assign - 1].occupied == "Occupied":
+            print("Table is occupied, Can Not Assign")
+        else:
+            new_table = Pooltable("Occupied", second, minute, hour, day, month, year)
+            tables[assign - 1] = new_table
+    except:
+        print("\nWoops, Let's start from the top!\n")
 
 def tardis(table):
     refresh_time()
@@ -88,7 +91,7 @@ def tardis(table):
     end_time = datetime.datetime(year = int(year), month = int(month), day = int(day), minute = int(minute)) #, second = int(second)
     # print(end_time)
     # print(start_time)
-    elapsed_time = end_time - start_time
+    # elapsed_time = end_time - start_time
     # print(elapsed_time)
     return end_time - start_time
 
