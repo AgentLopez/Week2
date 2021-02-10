@@ -1,6 +1,7 @@
 # 12 Pool Tables
 # See them all
 # Write when closing table to file
+import math
 import datetime
 now = datetime.datetime.now()
 
@@ -52,7 +53,7 @@ def view_tables():
         if items.occupied == "Available":
             print(f"Table {i} is {items.occupied}")
         else:
-            print(f"Table {i} is {items.occupied} since {items.hour}:{items.minute}")
+            print(f"Table {i} is {items.occupied} since {items.hour}:{items.minute} Current Tab: ${cost_now(i - 1)}")
         i += 1
 
 def close_table():
@@ -63,7 +64,7 @@ def close_table():
         eltime = tardis(table_number)
         f= open(f"{date}.txt", "a")
     
-        f.write(f"Table {closing}, {tables[table_number].hour}:{tables[table_number].minute}, {hour}:{minute}, Occupied for {eltime}\n")
+        f.write(f"Table {closing}, {tables[table_number].hour}:{tables[table_number].minute}, {hour}:{minute}, Occupied for {eltime} and Cost ${cost_now(table_number)}")
         f.close()
     
         # print(tardis(table_number))
@@ -95,6 +96,24 @@ def tardis(table):
     # print(elapsed_time)
     return end_time - start_time
 
+def cost_now(table):
+    time_to_charge = tardis(table)
+    time_test = str(time_to_charge)
+    seperate = time_test.split(":")
+    total_minutes = int(seperate[1]) + int((seperate[0] * 60))
+    cost = (total_minutes / 60) * 30
+    formatted_cost = "{0:.2f}".format(cost)
+    return formatted_cost
+    # print(total_minutes)
+    # print(cost)
+    # print(seperate)
+    # print(time_to_charge)
+    # print(type(time_test))
+    # print(type(time_to_charge))
+    
+    # print(seperate)
+
+
 def refresh_time():
     now = datetime.datetime.now()
     global hour
@@ -123,6 +142,9 @@ while awake == True:
         close_table()
     elif option == "q":
         awake = False
+    # elif option == "c":
+    #     ss = int(input("What Table Number?"))
+    #     cost_now(ss)
     else:
         print("Not A Valid Choicem, Please Try Again")
 
