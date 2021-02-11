@@ -10,7 +10,6 @@ from datetime import timedelta
 now = datetime.datetime.now()
 hour = now.strftime("%H")
 minute = now.strftime("%M")
-second = now.strftime("%S")
 month = now.strftime("%m")
 day = now.strftime("%d")
 year = now.strftime("%Y")
@@ -26,9 +25,8 @@ tables = []
 awake = True
 
 class Pooltable:
-    def __init__(self, occupied = "Available", second = "00", minute = "00", hour = "00", day = "00", month = "00", year = "0000" ):
+    def __init__(self, occupied = "Available", minute = "00", hour = "00", day = "00", month = "00", year = "0000" ):
         self.occupied = occupied
-        self.second = second
         self.minute = minute
         self.hour = hour
         self.day =  day
@@ -53,7 +51,7 @@ def view_tables():
         if items.occupied == "Available":
             print(f"Table {i} is {items.occupied}")
         else:
-            print(f"Table {i} is {items.occupied} since {items.hour}:{items.minute} Current Tab: ${cost_now(i - 1)}")
+            print(f"Table {i} is {items.occupied} since {pretty_time(items.hour, items.minute)} Current Tab: ${cost_now(i - 1)}")
         i += 1
 
 def close_table():
@@ -63,8 +61,9 @@ def close_table():
         date = now.strftime("%m-%d-%Y")
         eltime = tardis(table_number)
         f= open(f"{date}.txt", "a")
-    
-        f.write(f"Table {closing}, {tables[table_number].hour}:{tables[table_number].minute}, {hour}:{minute}, Occupied for {eltime} and Cost ${cost_now(table_number)}")
+        firsttime = pretty_time(tables[table_number].hour, tables[table_number].minute)
+        lasttime = pretty_time(hour, minute)
+        f.write(f"Table {closing}, {firsttime}, {lasttime}, Occupied for {eltime} and Cost ${cost_now(table_number)}\n")
         f.close()
     
         # print(tardis(table_number))
@@ -81,7 +80,7 @@ def assign_table():
         if tables[assign - 1].occupied == "Occupied":
             print("Table is occupied, Can Not Assign")
         else:
-            new_table = Pooltable("Occupied", second, minute, hour, day, month, year)
+            new_table = Pooltable("Occupied", minute, hour, day, month, year)
             tables[assign - 1] = new_table
     except:
         print("\nWoops, Let's start from the top!\n")
@@ -118,16 +117,29 @@ def refresh_time():
     now = datetime.datetime.now()
     global hour
     global minute
-    global second
     global month
     global day
     global year
     hour = now.strftime("%H")
     minute = now.strftime("%M")
-    second = now.strftime("%S")
     month = now.strftime("%m")
     day = now.strftime("%d")
     year = now.strftime("%Y")
+
+def pretty_time(hour, minute):
+    new_hour = ""
+    am_pm = "am"
+    if int(hour) == 00:
+        new_hour = 12
+    elif int(hour) > 12:
+        new_hour = int(hour) - 12
+        am_pm = "pm"
+    else:
+        new_hour = hour
+    return str(new_hour) + ":" + minute + " " + am_pm
+    
+
+
     
 
 while awake == True:
@@ -146,7 +158,7 @@ while awake == True:
     #     ss = int(input("What Table Number?"))
     #     cost_now(ss)
     else:
-        print("Not A Valid Choicem, Please Try Again")
+        print("Not A Valid Choice, Please Try Again")
 
 
 
